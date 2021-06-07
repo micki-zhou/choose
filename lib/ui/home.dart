@@ -1,4 +1,4 @@
-
+import 'dart:math';
 
 import 'package:choose/config/my_colors.dart';
 import 'package:flutter/material.dart';
@@ -31,16 +31,19 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(
-        duration: Duration(milliseconds: 1000), vsync: this);
+    animationController =
+        AnimationController(duration: Duration(milliseconds: 200), vsync: this);
     CurvedAnimation curvedAnimation =
-        CurvedAnimation(parent: animationController, curve: Curves.easeInCirc);
-    animation = Tween(begin: 18.0, end: 28.0).animate(curvedAnimation)
-      ..addListener(() {
-        setState(() {});
-      });
-    animationController.forward();
-
+        CurvedAnimation(parent: animationController, curve: Curves.easeOut);
+    animation = Tween(begin: 18.0, end: 28.0).animate(curvedAnimation);
+    animation.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        animationController.reverse();
+      }
+    });
+    animation.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
@@ -57,7 +60,12 @@ class _HomePageState extends State<HomePage>
         padding: const EdgeInsets.fromLTRB(0, 80, 0, 0),
         child: Center(
           child: Column(
-            children: [_middleView(), _addFoodInput(), _confirmButton()],
+            children: [
+              _middleView(),
+              _startButton(),
+              _addFoodInput(),
+              _confirmButton()
+            ],
           ),
         ),
       ),
@@ -104,13 +112,33 @@ class _HomePageState extends State<HomePage>
   }
 
   Widget _itemText(String content) {
-    return Text(content, style: TextStyle(color: Colors.white, fontSize: animation.value));
+    return Text(content,
+        style: TextStyle(color: Colors.white, fontSize: animation.value));
   }
 
   Widget _addFoodInput() {
     return TextField(
       onChanged: null,
       decoration: InputDecoration(fillColor: Colors.white, filled: true),
+    );
+  }
+
+  Widget _startButton() {
+    return Container(
+      margin: EdgeInsets.fromLTRB(0, 100, 0, 0),
+      child: TextButton(
+        onPressed: () {
+          var random = Random();
+          int index = random.nextInt(9);
+          print(index);
+          animationController.forward();
+        },
+        child: Text('开启'),
+        style: ButtonStyle(
+            textStyle: MaterialStateProperty.all(TextStyle(fontSize: 18)),
+            backgroundColor: MaterialStateProperty.all(Colors.blue),
+            foregroundColor: MaterialStateProperty.all(Colors.white)),
+      ),
     );
   }
 
