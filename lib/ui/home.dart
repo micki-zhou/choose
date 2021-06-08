@@ -27,18 +27,40 @@ class _HomePageState extends State<HomePage>
   late AnimationController animationController;
   // late CurvedAnimation curvedAnimation;
   late Animation<double> animation;
+  int preRandomIndex = 0;
+  int randomIndex = -1;
+  int currentLooperCount = 0;
+  int maxLooperCount = 50;
+  var random = Random();
 
   @override
   void initState() {
     super.initState();
     animationController =
-        AnimationController(duration: Duration(milliseconds: 200), vsync: this);
+        AnimationController(duration: Duration(milliseconds: 100), vsync: this);
     CurvedAnimation curvedAnimation =
         CurvedAnimation(parent: animationController, curve: Curves.easeOut);
     animation = Tween(begin: 18.0, end: 28.0).animate(curvedAnimation);
     animation.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        animationController.reverse();
+        if (currentLooperCount <= maxLooperCount) {
+          animationController.reverse();
+        } else {
+          currentLooperCount = 0;
+        }
+      } else if (status == AnimationStatus.dismissed) {
+        if (currentLooperCount <= maxLooperCount) {
+          int index = random.nextInt(10);
+          if (index == preRandomIndex) {
+            randomIndex = index + 1;
+            preRandomIndex = randomIndex;
+          } else {
+            randomIndex = index;
+            preRandomIndex = randomIndex;
+          }
+          animationController.forward();
+          currentLooperCount++;
+        }
       }
     });
     animation.addListener(() {
@@ -88,10 +110,8 @@ class _HomePageState extends State<HomePage>
           row.add(Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _itemText(
-                testArr[i],
-              ),
-              if (i + 1 < testArr.length) _itemText(testArr[i + 1])
+              _itemText(testArr[i], i),
+              if (i + 1 < testArr.length) _itemText(testArr[i + 1], i + 1)
             ],
           ));
           i += 2;
@@ -99,9 +119,9 @@ class _HomePageState extends State<HomePage>
         } else {
           row.add(
               Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-            _itemText(testArr[i]),
-            if (i + 1 < testArr.length) _itemText(testArr[i + 1]),
-            if (i + 2 < testArr.length) _itemText(testArr[i + 2])
+            _itemText(testArr[i], i),
+            if (i + 1 < testArr.length) _itemText(testArr[i + 1], i + 1),
+            if (i + 2 < testArr.length) _itemText(testArr[i + 2], i + 2)
           ]));
           i += 3;
           type = 0;
@@ -111,9 +131,12 @@ class _HomePageState extends State<HomePage>
     return row;
   }
 
-  Widget _itemText(String content) {
+  Widget _itemText(String content, int index) {
     return Text(content,
-        style: TextStyle(color: Colors.white, fontSize: animation.value));
+        style: TextStyle(
+          color: (index == randomIndex) ? MyColors.selectedItem : Colors.white,
+          fontSize: (index == randomIndex) ? animation.value : 18,
+        ));
   }
 
   Widget _addFoodInput() {
@@ -128,9 +151,9 @@ class _HomePageState extends State<HomePage>
       margin: EdgeInsets.fromLTRB(0, 100, 0, 0),
       child: TextButton(
         onPressed: () {
-          var random = Random();
-          int index = random.nextInt(9);
-          print(index);
+          int index = random.nextInt(testArr.length);
+          randomIndex = index;
+          preRandomIndex = randomIndex;
           animationController.forward();
         },
         child: Text('开启'),
