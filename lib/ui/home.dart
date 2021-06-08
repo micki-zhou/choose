@@ -13,19 +13,36 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   List testArr = [
-    '火锅',
-    '炒菜',
+    '干锅肥肠',
+    '回锅肉',
     '串串',
-    '冒菜',
+    '自制火锅',
     '小龙虾',
     '烧烤',
-    '水果',
-    '烧菜',
+    '水果拼盘',
+    '清蒸鱼',
+    '火爆肥肠',
+    '小煎鸭',
+    '回锅肉',
+    '串串',
+    '自制火锅',
+    '小龙虾',
+    '烧烤',
+    '水果拼盘',
+    '清蒸鱼',
+    '火爆肥肠',
+    '小煎鸭'
+    '回锅肉',
+    '串串',
+    '自制火锅',
+    '小龙虾',
+    '烧烤',
+    '水果拼盘',
+    '清蒸鱼',
     '火爆肥肠',
     '小煎鸭'
   ];
   late AnimationController animationController;
-  // late CurvedAnimation curvedAnimation;
   late Animation<double> animation;
   int preRandomIndex = 0;
   int randomIndex = -1;
@@ -79,15 +96,21 @@ class _HomePageState extends State<HomePage>
     return Scaffold(
       backgroundColor: MyColors.theme,
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 80, 0, 0),
+        padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
         child: Center(
-          child: Column(
-            children: [
-              _middleView(),
-              _startButton(),
-              _addFoodInput(),
-              _confirmButton()
-            ],
+          child: Wrap(
+            // crossAxisAlignment: CrossAxisAlignment.center,
+            // mainAxisAlignment: MainAxisAlignment.center,
+            // children: [
+            //   _middleView(),
+            //   // _startButton(),
+            //   // _addFoodInput(),
+            //   // _confirmButton()
+            // ],
+            spacing: 50,
+            runSpacing: 8,
+            alignment: WrapAlignment.center,
+            children: _getMiddleViewChild(),
           ),
         ),
       ),
@@ -101,34 +124,32 @@ class _HomePageState extends State<HomePage>
   }
 
   List<Widget> _getMiddleViewChild() {
-    List<Row> row = List.empty(growable: true);
+    List<Widget> itemArr = List.empty(growable: true);
     if (testArr.isNotEmpty) {
       int i = 0;
       int type = 0;
       while (i < testArr.length) {
         if (type == 0) {
-          row.add(Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _itemText(testArr[i], i),
-              if (i + 1 < testArr.length) _itemText(testArr[i + 1], i + 1)
-            ],
-          ));
+          itemArr.add(_itemText(testArr[i], i));
+          if (i + 1 < testArr.length) {
+            itemArr.add(_itemText(testArr[i + 1], i + 1));
+          }
           i += 2;
           type = 1;
         } else {
-          row.add(
-              Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-            _itemText(testArr[i], i),
-            if (i + 1 < testArr.length) _itemText(testArr[i + 1], i + 1),
-            if (i + 2 < testArr.length) _itemText(testArr[i + 2], i + 2)
-          ]));
+          itemArr.add(_itemText(testArr[i], i));
+          if (i + 1 < testArr.length) {
+            itemArr.add(_itemText(testArr[i + 1], i + 1));
+          }
+          if (i + 2 < testArr.length) {
+            itemArr.add(_itemText(testArr[i + 2], i + 2));
+          }
           i += 3;
           type = 0;
         }
       }
     }
-    return row;
+    return itemArr;
   }
 
   Widget _itemText(String content, int index) {
@@ -154,6 +175,9 @@ class _HomePageState extends State<HomePage>
           int index = random.nextInt(testArr.length);
           randomIndex = index;
           preRandomIndex = randomIndex;
+          if (animationController.status == AnimationStatus.completed) {
+            animationController.reverse();
+          }
           animationController.forward();
         },
         child: Text('开启'),
