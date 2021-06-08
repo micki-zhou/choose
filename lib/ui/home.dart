@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:choose/config/my_colors.dart';
+import 'package:choose/ui/add_food.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -55,7 +56,7 @@ class _HomePageState extends State<HomePage>
   void initState() {
     super.initState();
     animationController =
-        AnimationController(duration: Duration(milliseconds: 100), vsync: this);
+        AnimationController(duration: Duration(milliseconds: 60), vsync: this);
     CurvedAnimation curvedAnimation =
         CurvedAnimation(parent: animationController, curve: Curves.easeOut);
     animation = Tween(begin: 18.0, end: 22.0).animate(curvedAnimation);
@@ -109,7 +110,11 @@ class _HomePageState extends State<HomePage>
               children: _getMiddleViewChild(),
             ),
             Positioned(bottom: 60, right: 0, child: _startButton()),
-            Positioned(bottom: 10, right: 0,child: _addFoodButton(),)
+            Positioned(
+              bottom: 10,
+              right: 0,
+              child: _addFoodButton(),
+            )
           ],
         ),
       ),
@@ -154,53 +159,49 @@ class _HomePageState extends State<HomePage>
   }
 
   Widget _startButton() {
-    return Container(
-      margin: EdgeInsets.fromLTRB(0, 100, 0, 0),
-      child: TextButton(
-        onPressed: () {
-          int index = random.nextInt(testArr.length);
-          randomIndex = index;
-          preRandomIndex = randomIndex;
-          if (animationController.status == AnimationStatus.completed) {
-            animationController.reverse();
-          }
-          animationController.forward();
-        },
-        child: Text(btnStr),
-        style: ButtonStyle(
-          textStyle: MaterialStateProperty.all(TextStyle(fontSize: 16)),
-          backgroundColor: MaterialStateProperty.all(MyColors.selectedItem),
-          foregroundColor: MaterialStateProperty.all(Colors.white),
-          elevation: MaterialStateProperty.all(0),
-          padding: MaterialStateProperty.all(EdgeInsets.fromLTRB(20, 5, 20, 5)),
-          shape: MaterialStateProperty.all(RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  bottomLeft: Radius.circular(20)))),
-        ),
+    return TextButton(
+      onPressed: () {
+        int index = random.nextInt(testArr.length);
+        randomIndex = index;
+        preRandomIndex = randomIndex;
+        if (animationController.status == AnimationStatus.completed) {
+          animationController.reverse();
+        }
+        animationController.forward();
+      },
+      child: Text(btnStr),
+      style: ButtonStyle(
+        textStyle: MaterialStateProperty.all(TextStyle(fontSize: 16)),
+        backgroundColor: MaterialStateProperty.all(MyColors.selectedItem),
+        foregroundColor: MaterialStateProperty.all(Colors.white),
+        elevation: MaterialStateProperty.all(0),
+        padding: MaterialStateProperty.all(EdgeInsets.fromLTRB(20, 5, 20, 5)),
+        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                bottomLeft: Radius.circular(20)))),
       ),
     );
   }
 
   Widget _addFoodButton() {
-    return Container(
-      margin: EdgeInsets.fromLTRB(0, 100, 0, 0),
-      child: TextButton(
-        onPressed: () {
-          
-        },
-        child: Text('新增'),
-        style: ButtonStyle(
-          textStyle: MaterialStateProperty.all(TextStyle(fontSize: 16)),
-          backgroundColor: MaterialStateProperty.all(Colors.blue),
-          foregroundColor: MaterialStateProperty.all(Colors.white),
-          elevation: MaterialStateProperty.all(0),
-          padding: MaterialStateProperty.all(EdgeInsets.fromLTRB(20, 5, 20, 5)),
-          shape: MaterialStateProperty.all(RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  bottomLeft: Radius.circular(20)))),
-        ),
+    return TextButton(
+      onPressed: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return AddFoodPage();
+        }));
+      },
+      child: Text('新增'),
+      style: ButtonStyle(
+        textStyle: MaterialStateProperty.all(TextStyle(fontSize: 16)),
+        backgroundColor: MaterialStateProperty.all(Colors.blue),
+        foregroundColor: MaterialStateProperty.all(Colors.white),
+        elevation: MaterialStateProperty.all(0),
+        padding: MaterialStateProperty.all(EdgeInsets.fromLTRB(20, 5, 20, 5)),
+        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                bottomLeft: Radius.circular(20)))),
       ),
     );
   }
