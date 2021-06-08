@@ -31,8 +31,8 @@ class _HomePageState extends State<HomePage>
     '水果拼盘',
     '清蒸鱼',
     '火爆肥肠',
-    '小煎鸭'
-        '回锅肉',
+    '小煎鸭',
+    '回锅肉',
     '串串',
     '自制火锅',
     '小龙虾',
@@ -49,6 +49,7 @@ class _HomePageState extends State<HomePage>
   int currentLooperCount = 0;
   int maxLooperCount = 50;
   var random = Random();
+  String btnStr = '开启';
 
   @override
   void initState() {
@@ -64,6 +65,7 @@ class _HomePageState extends State<HomePage>
           animationController.reverse();
         } else {
           currentLooperCount = 0;
+          btnStr = '重选';
         }
       } else if (status == AnimationStatus.dismissed) {
         if (currentLooperCount <= maxLooperCount) {
@@ -106,7 +108,8 @@ class _HomePageState extends State<HomePage>
               alignment: WrapAlignment.center,
               children: _getMiddleViewChild(),
             ),
-            Positioned(bottom: 10,right: 10, child: _startButton())
+            Positioned(bottom: 60, right: 0, child: _startButton()),
+            Positioned(bottom: 10, right: 0,child: _addFoodButton(),)
           ],
         ),
       ),
@@ -170,23 +173,48 @@ class _HomePageState extends State<HomePage>
           }
           animationController.forward();
         },
-        child: Text('开启'),
+        child: Text(btnStr),
         style: ButtonStyle(
-            textStyle: MaterialStateProperty.all(TextStyle(fontSize: 18)),
-            backgroundColor: MaterialStateProperty.all(Colors.blue),
-            foregroundColor: MaterialStateProperty.all(Colors.white)),
+          textStyle: MaterialStateProperty.all(TextStyle(fontSize: 16)),
+          backgroundColor: MaterialStateProperty.all(MyColors.selectedItem),
+          foregroundColor: MaterialStateProperty.all(Colors.white),
+          elevation: MaterialStateProperty.all(0),
+          padding: MaterialStateProperty.all(EdgeInsets.fromLTRB(20, 5, 20, 5)),
+          shape: MaterialStateProperty.all(RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  bottomLeft: Radius.circular(20)))),
+        ),
       ),
     );
   }
 
-  Widget _confirmButton() {
-    return TextButton(
-      onPressed: null,
-      child: Text('确定'),
-      style: ButtonStyle(
-          textStyle: MaterialStateProperty.all(TextStyle(fontSize: 18)),
+  Widget _addFoodButton() {
+    return Container(
+      margin: EdgeInsets.fromLTRB(0, 100, 0, 0),
+      child: TextButton(
+        onPressed: () {
+          int index = random.nextInt(testArr.length);
+          randomIndex = index;
+          preRandomIndex = randomIndex;
+          if (animationController.status == AnimationStatus.completed) {
+            animationController.reverse();
+          }
+          animationController.forward();
+        },
+        child: Text('新增'),
+        style: ButtonStyle(
+          textStyle: MaterialStateProperty.all(TextStyle(fontSize: 16)),
           backgroundColor: MaterialStateProperty.all(Colors.blue),
-          foregroundColor: MaterialStateProperty.all(Colors.white)),
+          foregroundColor: MaterialStateProperty.all(Colors.white),
+          elevation: MaterialStateProperty.all(0),
+          padding: MaterialStateProperty.all(EdgeInsets.fromLTRB(20, 5, 20, 5)),
+          shape: MaterialStateProperty.all(RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  bottomLeft: Radius.circular(20)))),
+        ),
+      ),
     );
   }
 }
