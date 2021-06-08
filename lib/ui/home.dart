@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage>
     '清蒸鱼',
     '火爆肥肠',
     '小煎鸭'
-    '回锅肉',
+        '回锅肉',
     '串串',
     '自制火锅',
     '小龙虾',
@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage>
         AnimationController(duration: Duration(milliseconds: 100), vsync: this);
     CurvedAnimation curvedAnimation =
         CurvedAnimation(parent: animationController, curve: Curves.easeOut);
-    animation = Tween(begin: 18.0, end: 28.0).animate(curvedAnimation);
+    animation = Tween(begin: 18.0, end: 22.0).animate(curvedAnimation);
     animation.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         if (currentLooperCount <= maxLooperCount) {
@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage>
         }
       } else if (status == AnimationStatus.dismissed) {
         if (currentLooperCount <= maxLooperCount) {
-          int index = random.nextInt(10);
+          int index = random.nextInt(testArr.length);
           if (index == preRandomIndex) {
             randomIndex = index + 1;
             preRandomIndex = randomIndex;
@@ -95,23 +95,19 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.theme,
-      body: Container(
-        padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-        child: Center(
-          child: Wrap(
-            // crossAxisAlignment: CrossAxisAlignment.center,
-            // mainAxisAlignment: MainAxisAlignment.center,
-            // children: [
-            //   _middleView(),
-            //   // _startButton(),
-            //   // _addFoodInput(),
-            //   // _confirmButton()
-            // ],
-            spacing: 60,
-            runSpacing: 8,
-            alignment: WrapAlignment.center,
-            children: _getMiddleViewChild(),
-          ),
+      body: ConstrainedBox(
+        constraints: BoxConstraints.expand(),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Wrap(
+              spacing: 60,
+              runSpacing: 8,
+              alignment: WrapAlignment.center,
+              children: _getMiddleViewChild(),
+            ),
+            Positioned(bottom: 10,right: 10, child: _startButton())
+          ],
         ),
       ),
     );
