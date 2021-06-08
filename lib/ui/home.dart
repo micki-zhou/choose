@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.theme,
-      body: Padding(
+      body: Container(
         padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
         child: Center(
           child: Wrap(
@@ -107,19 +107,13 @@ class _HomePageState extends State<HomePage>
             //   // _addFoodInput(),
             //   // _confirmButton()
             // ],
-            spacing: 50,
+            spacing: 60,
             runSpacing: 8,
             alignment: WrapAlignment.center,
             children: _getMiddleViewChild(),
           ),
         ),
       ),
-    );
-  }
-
-  Widget _middleView() {
-    return Column(
-      children: _getMiddleViewChild(),
     );
   }
 
