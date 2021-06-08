@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:choose/config/my_colors.dart';
 import 'package:choose/ui/add_food.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -13,36 +14,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
-  List testArr = [
-    '干锅肥肠',
-    '回锅肉',
-    '串串',
-    '自制火锅',
-    '小龙虾',
-    '烧烤',
-    '水果拼盘',
-    '清蒸鱼',
-    '火爆肥肠',
-    '小煎鸭',
-    '回锅肉',
-    '串串',
-    '自制火锅',
-    '小龙虾',
-    '烧烤',
-    '水果拼盘',
-    '清蒸鱼',
-    '火爆肥肠',
-    '小煎鸭',
-    '回锅肉',
-    '串串',
-    '自制火锅',
-    '小龙虾',
-    '烧烤',
-    '水果拼盘',
-    '清蒸鱼',
-    '火爆肥肠',
-    '小煎鸭'
-  ];
+
   late AnimationController animationController;
   late Animation<double> animation;
   int preRandomIndex = 0;
@@ -52,9 +24,17 @@ class _HomePageState extends State<HomePage>
   var random = Random();
   String btnStr = '开启';
 
+  late List<String> foodList;
+
+  void getFoodList() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    foodList = sharedPreferences.getStringList('food')!;
+  }
+
   @override
   void initState() {
     super.initState();
+    getFoodList();
     animationController =
         AnimationController(duration: Duration(milliseconds: 60), vsync: this);
     CurvedAnimation curvedAnimation =
@@ -70,7 +50,7 @@ class _HomePageState extends State<HomePage>
         }
       } else if (status == AnimationStatus.dismissed) {
         if (currentLooperCount <= maxLooperCount) {
-          int index = random.nextInt(testArr.length);
+          int index = random.nextInt(foodList.length);
           if (index == preRandomIndex) {
             randomIndex = index + 1;
             preRandomIndex = randomIndex;
@@ -123,24 +103,24 @@ class _HomePageState extends State<HomePage>
 
   List<Widget> _getMiddleViewChild() {
     List<Widget> itemArr = List.empty(growable: true);
-    if (testArr.isNotEmpty) {
+    if (foodList.isNotEmpty) {
       int i = 0;
       int type = 0;
-      while (i < testArr.length) {
+      while (i < foodList.length) {
         if (type == 0) {
-          itemArr.add(_itemText(testArr[i], i));
-          if (i + 1 < testArr.length) {
-            itemArr.add(_itemText(testArr[i + 1], i + 1));
+          itemArr.add(_itemText(foodList[i], i));
+          if (i + 1 < foodList.length) {
+            itemArr.add(_itemText(foodList[i + 1], i + 1));
           }
           i += 2;
           type = 1;
         } else {
-          itemArr.add(_itemText(testArr[i], i));
-          if (i + 1 < testArr.length) {
-            itemArr.add(_itemText(testArr[i + 1], i + 1));
+          itemArr.add(_itemText(foodList[i], i));
+          if (i + 1 < foodList.length) {
+            itemArr.add(_itemText(foodList[i + 1], i + 1));
           }
-          if (i + 2 < testArr.length) {
-            itemArr.add(_itemText(testArr[i + 2], i + 2));
+          if (i + 2 < foodList.length) {
+            itemArr.add(_itemText(foodList[i + 2], i + 2));
           }
           i += 3;
           type = 0;
@@ -161,7 +141,7 @@ class _HomePageState extends State<HomePage>
   Widget _startButton() {
     return TextButton(
       onPressed: () {
-        int index = random.nextInt(testArr.length);
+        int index = random.nextInt(foodList.length);
         randomIndex = index;
         preRandomIndex = randomIndex;
         if (animationController.status == AnimationStatus.completed) {
