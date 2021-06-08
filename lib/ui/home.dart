@@ -153,13 +153,6 @@ class _HomePageState extends State<HomePage>
         ));
   }
 
-  Widget _addFoodInput() {
-    return TextField(
-      onChanged: null,
-      decoration: InputDecoration(fillColor: Colors.white, filled: true),
-    );
-  }
-
   Widget _startButton() {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 100, 0, 0),
@@ -194,13 +187,7 @@ class _HomePageState extends State<HomePage>
       margin: EdgeInsets.fromLTRB(0, 100, 0, 0),
       child: TextButton(
         onPressed: () {
-          int index = random.nextInt(testArr.length);
-          randomIndex = index;
-          preRandomIndex = randomIndex;
-          if (animationController.status == AnimationStatus.completed) {
-            animationController.reverse();
-          }
-          animationController.forward();
+          
         },
         child: Text('新增'),
         style: ButtonStyle(
