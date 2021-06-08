@@ -14,7 +14,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
-
   late AnimationController animationController;
   late Animation<double> animation;
   int preRandomIndex = 0;
@@ -24,7 +23,7 @@ class _HomePageState extends State<HomePage>
   var random = Random();
   String btnStr = '开启';
 
-  late List<String> foodList;
+  late List<String> foodList = [];
 
   void getFoodList() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -141,13 +140,15 @@ class _HomePageState extends State<HomePage>
   Widget _startButton() {
     return TextButton(
       onPressed: () {
-        int index = random.nextInt(foodList.length);
-        randomIndex = index;
-        preRandomIndex = randomIndex;
-        if (animationController.status == AnimationStatus.completed) {
-          animationController.reverse();
+        if (foodList.isNotEmpty) {
+          int index = random.nextInt(foodList.length);
+          randomIndex = index;
+          preRandomIndex = randomIndex;
+          if (animationController.status == AnimationStatus.completed) {
+            animationController.reverse();
+          }
+          animationController.forward();
         }
-        animationController.forward();
       },
       child: Text(btnStr),
       style: ButtonStyle(
