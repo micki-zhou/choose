@@ -28,6 +28,12 @@ class _HomePageState extends State<HomePage>
   void getFoodList() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     foodList = sharedPreferences.getStringList('food')!;
+    setState(() {});
+  }
+
+  void saveFood() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setStringList('food', foodList);
   }
 
   @override
@@ -130,11 +136,20 @@ class _HomePageState extends State<HomePage>
   }
 
   Widget _itemText(String content, int index) {
-    return Text(content,
-        style: TextStyle(
-          color: (index == randomIndex) ? MyColors.selectedItem : Colors.white,
-          fontSize: (index == randomIndex) ? animation.value : 18,
-        ));
+    return GestureDetector(
+      onDoubleTap: () {
+        foodList.removeAt(index);
+        print('remove result: ' + foodList.toString());
+        saveFood();
+        setState(() {});
+      },
+      child: Text(content,
+          style: TextStyle(
+            color:
+                (index == randomIndex) ? MyColors.selectedItem : Colors.white,
+            fontSize: (index == randomIndex) ? animation.value : 18,
+          )),
+    );
   }
 
   Widget _startButton() {

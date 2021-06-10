@@ -17,7 +17,7 @@ class _AddFoodPageState extends State<AddFoodPage>
   late Animation<Offset> animation;
   late Animation<double> slide;
 
-  late List<String> foodList;
+  late List<String> foodList = [];
 
   String tipStr = "Hi , \n你想添加什么菜品 ?";
   String hintStr = "请输入菜品";
@@ -26,6 +26,7 @@ class _AddFoodPageState extends State<AddFoodPage>
   void getFoodList() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     foodList = sharedPreferences.getStringList('food')!;
+    print("add food: " + foodList.toString());
   }
 
   @override
@@ -96,7 +97,7 @@ class _AddFoodPageState extends State<AddFoodPage>
           isCollapsed: true,
           contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
           border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(4),
               borderSide: BorderSide.none),
           fillColor: Colors.white,
           filled: true,
@@ -111,11 +112,16 @@ class _AddFoodPageState extends State<AddFoodPage>
       width: double.infinity,
       child: TextButton(
         onPressed: () {
-          saveFood();
-          Navigator.pushAndRemoveUntil(context,
-              MaterialPageRoute(builder: (context) {
-            return HomePage();
-          }), (route) => false);
+          if (foodStr.isNotEmpty) {
+            foodList.add(foodStr);
+            saveFood();
+            Navigator.pushAndRemoveUntil(context,
+                MaterialPageRoute(builder: (context) {
+              return HomePage();
+            }), (route) => false);
+          } else {
+            print('foodStr is null');
+          }
         },
         child: Text('确定'),
         style: ButtonStyle(
