@@ -26,7 +26,7 @@ class _AddFoodPageState extends State<AddFoodPage>
   void getFoodList() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     foodList = sharedPreferences.getStringList('food')!;
-    print("add food: " + foodList.toString());
+    // print("add food: " + foodList.toString());
   }
 
   @override
