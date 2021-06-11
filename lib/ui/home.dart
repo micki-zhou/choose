@@ -1,6 +1,7 @@
 import 'dart:math';
 
-
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:choose/config/my_colors.dart';
 import 'package:choose/ui/add_food.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,8 @@ class _HomePageState extends State<HomePage>
 
   late List<String> foodList = [];
 
-
+  AudioPlayer audioPlayer = AudioPlayer();
+  AudioCache audioCache = AudioCache();
 
   void getFoodList() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -208,10 +210,12 @@ class _HomePageState extends State<HomePage>
   }
 
   void playAudio() async {
-    // await audioPlayer.play('lalala.mp3');
+    audioCache.play('sounds/lalala.mp3');
+    audioCache.fixedPlayer = audioPlayer;
   }
 
   void destoryAudio() async {
-    // await audioPlayer.release();
+    await audioPlayer.stop();
+    audioCache.clearCache();
   }
 }
