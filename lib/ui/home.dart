@@ -83,6 +83,7 @@ class _HomePageState extends State<HomePage>
   void dispose() {
     super.dispose();
     animationController.dispose();
+    audioPlayer.release();
   }
 
   @override
