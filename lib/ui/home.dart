@@ -1,5 +1,6 @@
 import 'dart:math';
 
+
 import 'package:choose/config/my_colors.dart';
 import 'package:choose/ui/add_food.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,8 @@ class _HomePageState extends State<HomePage>
   String btnStr = '开启';
 
   late List<String> foodList = [];
+
+
 
   void getFoodList() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -52,6 +55,7 @@ class _HomePageState extends State<HomePage>
         } else {
           currentLooperCount = 0;
           btnStr = '重选';
+          destoryAudio();
         }
       } else if (status == AnimationStatus.dismissed) {
         if (currentLooperCount <= maxLooperCount) {
@@ -163,6 +167,7 @@ class _HomePageState extends State<HomePage>
             animationController.reverse();
           }
           animationController.forward();
+          playAudio();
         }
       },
       child: Text(btnStr),
@@ -200,5 +205,13 @@ class _HomePageState extends State<HomePage>
                 bottomLeft: Radius.circular(20)))),
       ),
     );
+  }
+
+  void playAudio() async {
+    // await audioPlayer.play('lalala.mp3');
+  }
+
+  void destoryAudio() async {
+    // await audioPlayer.release();
   }
 }
