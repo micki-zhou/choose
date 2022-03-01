@@ -80,6 +80,12 @@ class _HomePageState extends State<HomePage>
   }
 
   @override
+  void deactivate() {
+    super.deactivate();
+    print('home: deactivate run-----------------------------------');
+  }
+
+  @override
   void dispose() {
     super.dispose();
     animationController.dispose();
@@ -191,6 +197,7 @@ class _HomePageState extends State<HomePage>
   Widget _addFoodButton() {
     return TextButton(
       onPressed: () {
+        print('home: _addFoodButton run-----------------------------------');
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return AddFoodPage();
         }));
